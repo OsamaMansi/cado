@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="html-root">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم الإدارية | أورا للهدايا الفاخرة</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .admin-container { max-width: 1200px; margin: 40px auto; padding: 20px; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid var(--gold-primary); padding-bottom: 15px; }
+        .admin-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; }
+        @media(max-width: 900px) { .admin-grid { grid-template-columns: 1fr; } }
+        .admin-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; box-shadow: var(--shadow-soft); }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .admin-table th, .admin-table td { padding: 12px; text-align: right; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
+        .admin-table th { color: var(--gold-primary); background: rgba(197, 160, 89, 0.05); }
+        .size-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 10px; margin-bottom: 10px; align-items: center; }
+        .btn-action { padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; font-size: 0.85rem; font-weight: bold; margin-left: 5px; }
+        .btn-edit { background: #3498db; color: #fff; }
+        .btn-copy { background: #f39c12; color: #fff; }
+        .btn-delete { background: #e74c3c; color: #fff; }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo-container" style="display: flex; align-items: center; gap: 15px;">
+            <a href="index.html" style="text-decoration: none; color: var(--gold-primary); font-weight: bold;">← العودة للمتجر الرئيسي</a>
+        </div>
+        <h2 style="color: var(--gold-primary); font-size: 1.3rem;">لوحة إدارة منتجات أورا</h2>
+        <div></div>
+    </header>
+
+    <div class="admin-container">
+        <div class="admin-grid">
+            
+            <!-- نموذج إضافة أو تعديل منتج -->
+            <div class="admin-card">
+                <h3 id="form-title" style="color: var(--gold-primary); margin-bottom: 20px;">➕ إضافة منتج جديد</h3>
+                <form id="product-form">
+                    <input type="hidden" id="prod-id">
+                    
+                    <label>عنوان المنتج:</label>
+                    <input type="text" id="prod-title" placeholder="مثال: صندوق الفخامة الملكي" required style="width:100%; padding:10px; margin:8px 0 15px; border-radius:6px; border:1px solid var(--border-color);">
+
+                    <label>وصف المنتج:</label>
+                    <textarea id="prod-desc" placeholder="تفاصيل ومواصفات الصندوق..." style="width:100%; padding:10px; margin:8px 0 15px; border-radius:6px; border:1px solid var(--border-color); height:80px;"></textarea>
+
+                    <label>رابط الصورة (مسار محلي أو URL):</label>
+                    <input type="text" id="prod-image" placeholder="assets/images/imajes (1).jpeg" required style="width:100%; padding:10px; margin:8px 0 15px; border-radius:6px; border:1px solid var(--border-color);">
+
+                    <label style="color: var(--gold-primary); font-weight: bold; display: block; margin-bottom: 10px;">إدارة الأحجام والأسعار (قبل / بعد الخصم):</label>
+                    
+                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px;">الحجم الصغير:</div>
+                    <div class="size-row">
+                        <input type="text" id="sz-0-name" value="صغير (20x20 سم)" readonly style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
+                        <input type="number" id="sz-0-before" placeholder="قبل الخصم" step="0.01" required style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
+                        <input type="number" id="sz-0-after" placeholder="بعد الخصم" step="0.01" required style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
+                    </div>
+
+                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; margin-top: 10px;">الحجم الوسط (+10 د.أ عن الصغير):</div>
+                    <div class="size-row">
+                        <input type="text" id="sz-1-name" value="وسط (25x25 سم)" readonly style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
+                        <input type="number" id="sz-1-before" placeholder="قبل الخصم" step="0.01" required style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
+                        <input type="number" id="sz-1-after" placeholder="بعد الخصم" step="0.01" required style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
+                    </div>
+
+                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; margin-top: 10px;">الحجم الكبير (+5 د.أ عن الوسط):</div>
+                    <div class="size-row">
+                        <input type="text" id="sz-2-name" value="كبير (30x30 سم)" readonly style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
+                        <input type="number" id="sz-2-before" placeholder="قبل الخصم" step="0.01" required style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
+                        <input type="number" id="sz-2-after" placeholder="بعد الخصم" step="0.01" required style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button type="submit" class="btn-primary" style="flex: 2; padding: 12px; font-weight: bold;">حفظ المنتج في القاعدة</button>
+                        <button type="button" id="reset-form-btn" style="flex: 1; background: #95a5a6; color: #fff; border: none; border-radius: 6px; cursor: pointer;">إلغاء</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- جدول عرض المنتجات وتعديلها -->
+            <div class="admin-card">
+                <h3 style="color: var(--gold-primary); margin-bottom: 15px;">📦 إدارة قائمة المنتجات المسجلة</h3>
+                <div style="max-height: 550px; overflow-y: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>الصورة</th>
+                                <th>اسم المنتج</th>
+                                <th>أسعار الحجوم (د.أ)</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-products-table-body">
+                            <!-- تعبئة ديناميكية -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="module" src="js/admin.js"></script>
+</body>
+</html>

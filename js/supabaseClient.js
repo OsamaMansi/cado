@@ -1,11 +1,6 @@
-// ==========================================
-// أورا للهدايا الفاخرة - ملف الاتصال بقاعدة البيانات (Supabase)
-// ==========================================
-
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-// ملاحظة: استبدل القيم أدناه ببيانات مشروعك الحقيقية من لوحة تحكم Supabase (Project Settings -> API)
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL = 'https://phjlxjmdtdrolgupnoeh.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBoamx4am1kdGRyb2xndXBub2VoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM2MTQxMDYsImV4cCI6MjEwOTE5MDEwNn0.LmMcgFKi7S0a779SqWxNx9duQf2I-jX_tAhDAI7ScOQ';
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
