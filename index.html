@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="html-root">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-lang="site_title">أورا للهدايا الفاخرة | AURA</title>
+    <!-- ملف الستايل الموحد والشامل -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- الهيدر العلوي، الشعار، أزرار تبديل اللغة والوضع الليلي -->
+    <header class="header">
+        <div class="logo-container" style="display: flex; align-items: center; gap: 15px;">
+            <img src="assets/logo.png" alt="شعار أورا" style="height: 50px; object-fit: contain;">
+            <div>
+                <div class="logo" data-lang="logo_title">أُورَا</div>
+                <span data-lang="logo_subtitle">للهدايا الفاخرة</span>
+            </div>
+        </div>
+        
+        <nav style="display: flex; align-items: center; gap: 20px;">
+            <a href="#products" data-lang="nav_products" style="text-decoration: none; color: var(--text-dark); font-weight: 500;">المجموعة</a>
+            <a href="#checkout" data-lang="nav_checkout" style="text-decoration: none; color: var(--text-dark); font-weight: 500;">تخصيص الطلب</a>
+            
+            <!-- زر تبديل الوضع الليلي والنهاري -->
+            <button id="theme-toggle-btn" class="btn-secondary" style="width: auto; padding: 6px 12px; margin: 0; font-size: 0.85rem;" title="تغيير المظهر">🌙 / ☀️</button>
+            
+            <!-- زر تبديل اللغة (عربي / إنجليزي) -->
+            <button id="lang-toggle-btn" class="btn-secondary" style="width: auto; padding: 6px 12px; margin: 0; font-size: 0.85rem;">EN</button>
+        </nav>
+    </header>
+
+    <!-- 1. قسم المنتجات وصناديق الهدايا الفخمة -->
+    <section id="products" class="container">
+        <h2 class="section-title" data-lang="section_products_title" style="text-align: center; margin-bottom: 2.5rem; color: var(--gold-primary);">صناديق وبكجات الهدايا المخصصة</h2>
+        <div id="products-grid" class="products-grid">
+            <!-- يتم تعبئة المنتجات ديناميكياً من ملف الجافاسكريبت -->
+        </div>
+    </section>
+
+    <!-- 2. قسم السلة وتخصيص الطلبات وإتمام الشراء -->
+    <section id="checkout" class="container checkout-section">
+        <div class="checkout-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            
+            <!-- نموذج التخصيص -->
+            <div class="card customization-card">
+                <h3 data-lang="custom_title" style="color: var(--gold-primary); margin-bottom: 1.5rem;">1. تخصيص وتفاصيل الطلب</h3>
+                <form id="customization-form">
+                    <label data-lang="label_select_product">اختر المنتج المراد تخصيصه:</label>
+                    <select id="custom-product-select" required></select>
+
+                    <label data-lang="label_select_size">تأكيد الحجم المطلوب:</label>
+                    <div id="size-options" class="radio-group" style="margin: 10px 0 20px; display: flex; gap: 15px;"></div>
+
+                    <label data-lang="label_engraving">العبارة أو الاسم المطلوب طباعته على الصندوق:</label>
+                    <input type="text" id="engraving-text" placeholder="مثال: لملكة قلبي - ياسمين">
+
+                    <label data-lang="label_inner_text">إضافة عبارة للهدية الداخلية (إن أردت):</label>
+                    <input type="text" id="inner-text" placeholder="مثال: كل عام وأنت بخير">
+
+                    <label data-lang="label_upload_image">إضافة صورة للرسم على الزجاج/الأكريليك:</label>
+                    <input type="file" id="custom-image-file" accept="image/*">
+
+                    <button type="button" id="add-to-cart-btn" class="btn-secondary" style="margin-top: 10px;" data-lang="btn_add_to_cart">+ إضافة هذا الطلب إلى السلة</button>
+                </form>
+            </div>
+
+            <!-- ملخص الطلبات والإجمالي -->
+            <div class="card summary-card">
+                <h3 data-lang="summary_title" style="color: var(--gold-primary); margin-bottom: 1.5rem;">2. ملخص الطلبيات النشطة</h3>
+                <div id="cart-items" class="cart-items-list" style="margin-bottom: 1.5rem; max-height: 200px; overflow-y: auto;">
+                    <p class="empty-msg" data-lang="empty_cart_msg" style="color: var(--text-muted);">لم يتم إضافة أية طلبات بعد.</p>
+                </div>
+
+                <div class="shipping-toggle" style="margin-bottom: 1.5rem;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="shipping-checkbox" checked style="width: auto; margin: 0;">
+                        <span data-lang="shipping_label">إضافة أجور التوصيل لكامل البكج (واصل للعميل)</span>
+                    </label>
+                </div>
+
+                <div class="price-breakdown" style="border-top: 1px solid var(--border-color); padding-top: 1rem; margin-bottom: 1.5rem;">
+                    <div style="display: flex; justify-content: margin; justify-content: space-between; margin-bottom: 8px;">
+                        <span data-lang="subtotal_text">مجموع المنتجات:</span> 
+                        <span><span id="subtotal-val">0</span> <span data-lang="currency">ر.س</span></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span data-lang="shipping_text">أجور الشحن السريع:</span> 
+                        <span><span id="shipping-val">35</span> <span data-lang="currency">ر.س</span></span>
+                    </div>
+                    <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 10px 0;">
+                    <div class="total-row" style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem; color: var(--gold-primary);">
+                        <span data-lang="total_text">المجموع الكلي:</span> 
+                        <span><span id="total-val">35</span> <span data-lang="currency">ر.س</span></span>
+                    </div>
+                </div>
+
+                <!-- نموذج بيانات العميل وإرسال الطلب -->
+                <form id="order-submit-form" class="order-form">
+                    <h4 data-lang="customer_info_title" style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">بيانات الاستلام والتحقق</h4>
+                    <input type="text" id="cust-name" data-placeholder="cust_name_placeholder" placeholder="الاسم الكامل" required>
+                    <input type="tel" id="cust-phone" placeholder="رقم الواتساب (مثال: 9665xxxxxxxx)" required>
+                    <input type="email" id="cust-email" placeholder="البريد الإلكتروني" required>
+                    <textarea id="cust-address" placeholder="عنوان التسليم بالتفصيل" required></textarea>
+
+                    <button type="submit" id="submit-order-btn" class="btn-primary" data-lang="btn_confirm_order">تأكيد وإرسال الطلب (واتساب وإيميل)</button>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ملف الجافاسكريبت الرئيسي -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

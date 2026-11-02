@@ -1,0 +1,216 @@
+/* ==========================================
+   أورا للهدايا الفاخرة - ملف الستايل الشامل
+   ========================================== */
+
+:root {
+    --gold-primary: #C5A059;
+    --gold-hover: #D4AF37;
+    --gold-gradient: linear-gradient(135deg, #DFBF77 0%, #C5A059 50%, #A37E39 100%);
+    --bg-light: #F8F9FA;
+    --card-bg: #FFFFFF;
+    --text-dark: #1A1A1A;
+    --text-muted: #6C757D;
+    --border-color: #E2E8F0;
+    --shadow-soft: 0 10px 30px rgba(197, 160, 89, 0.08);
+    --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* التصفح الليلي (Dark Mode) */
+body.dark-mode {
+    --bg-light: #121212;
+    --card-bg: #1E1E1E;
+    --text-dark: #F8F9FA;
+    --text-muted: #A0A0A0;
+    --border-color: #333333;
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    transition: var(--transition-smooth);
+}
+
+/* الهيدر والعنوان */
+.header {
+    background: var(--card-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 5%;
+    border-bottom: 2px solid var(--gold-primary);
+    box-shadow: var(--shadow-soft);
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--gold-primary);
+}
+
+.logo span {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-dark);
+}
+
+/* حاوية المنتجات وصناديق الصور بالحركة الناعمة القابلة للتوسع */
+.container {
+    padding: 3rem 5%;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+}
+
+.product-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition-smooth);
+    transform: translateY(0);
+}
+
+/* حركة ناعمة جداً عند تمرير الماوس وتوسع أنيق */
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(197, 160, 89, 0.15);
+    border-color: var(--gold-primary);
+}
+
+.product-img-wrapper {
+    position: relative;
+    height: 280px;
+    overflow: hidden;
+}
+
+.product-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card:hover .product-img-wrapper img {
+    transform: scale(1.08);
+}
+
+/* زر الإضافة فوق الصورة */
+.btn-add-top {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--gold-gradient);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: var(--transition-smooth);
+    z-index: 2;
+}
+
+.btn-add-top:hover {
+    transform: scale(1.05);
+    opacity: 0.95;
+}
+
+.product-info {
+    padding: 1.8rem;
+}
+
+.details-drawer {
+    display: none;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--border-color);
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+.details-toggle {
+    color: var(--gold-primary);
+    cursor: pointer;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 0.5rem;
+    transition: opacity 0.2s;
+}
+
+.details-toggle:hover {
+    opacity: 0.8;
+}
+
+.price-box {
+    margin-top: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.price-before {
+    text-decoration: line-through;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.price-after {
+    color: var(--gold-primary);
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+/* البطاقات والتحكم العام */
+.card {
+    background: var(--card-bg);
+    padding: 2.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-soft);
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 18px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--card-bg);
+    color: var(--text-dark);
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--gold-primary);
+    outline: none;
+}
+
+.btn-primary {
+    width: 100%;
+    background: var(--gold-gradient);
+    color: #fff;
+    border: none;
+    padding: 14px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.btn-primary:hover {
+    opacity: 0.95;
+    transform: translateY(-2px);
+}
+
+.hidden { display: none !important; }
