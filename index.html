@@ -8,8 +8,6 @@
 </head>
 <body>
 
-    <!-- الهيدر العلوي: يظهر الشعارين معاً بشكل راقي وأنيق -->
-<!-- الهيدر العلوي -->
 <header class="header">
     <div class="logo-container" style="display: flex; align-items: center; gap: 15px;">
         <img id="logo-en-img" src="assets/logo.png" alt="شعار أورا الإنجليزي" style="height: 120px; object-fit: contain;">
@@ -35,7 +33,6 @@
     </div>
 </header>
 
-<!-- قسم Hero مع الشعار العربي في الخلفية -->
 <section id="hero" class="container">
     <div class="hero-section">
         <img id="bg-logo-img" src="assets/aura.png" alt="خلفية الشعار" class="hero-bg-logo">
@@ -53,16 +50,11 @@
     </div>
 </section>
 
-
-    <!-- قسم الصناديق الثمانية بالكامل (4 في كل سطر) -->
     <section id="products" class="container">
         <h2 class="section-title" data-lang="section_products_title">صناديق وبكجات الهدايا المخصصة</h2>
-        <div id="products-grid" class="products-grid">
-            <!-- يتم تعبئة الصناديق الثمانية ديناميكياً -->
-        </div>
+        <div id="products-grid" class="products-grid"></div>
     </section>
 
-    <!-- قسم التخصيص وإتمام الطلب -->
     <section id="checkout" class="container checkout-section">
         <h2 class="section-title" data-lang="checkout_main_title">شاشة إضافة وتخصيص الطلبية</h2>
         <div class="checkout-grid">
@@ -84,6 +76,12 @@
 
                     <label data-lang="label_upload_image">إضافة صورة للرسم على الزجاج/الأكريليك:</label>
                     <input type="file" id="custom-image-file" accept="image/*">
+                    
+                    <!-- معاينة الصورة المرفقة قبل إضافتها للسلة -->
+                    <div id="image-preview-container" style="margin: 10px 0; display: none;">
+                        <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 5px;">معاينة الصورة المرفقة:</span>
+                        <img id="upload-preview-img" src="" alt="معاينة الصورة" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--gold-primary);">
+                    </div>
 
                     <button type="button" id="add-to-cart-btn" class="btn-primary" style="margin-top: 10px;" data-lang="btn_add_to_cart">+ إضافة هذا الطلب إلى السلة</button>
                 </form>
@@ -91,11 +89,10 @@
 
             <div class="card summary-card">
                 <h3 data-lang="summary_title" style="color: var(--gold-primary); margin-bottom: 1.5rem;">2. ملخص الطلبيات النشطة</h3>
-                <div id="cart-items" class="cart-items-list" style="margin-bottom: 1.5rem; max-height: 200px; overflow-y: auto;">
+                <div id="cart-items" class="cart-items-list" style="margin-bottom: 1.5rem; max-height: 250px; overflow-y: auto;">
                     <p class="empty-msg" data-lang="empty_cart_msg" style="color: var(--text-muted);">لم يتم إضافة أية طلبات بعد.</p>
                 </div>
 
-<!-- قائمة اختيار المحافظة لحساب الشحن -->
 <div class="shipping-toggle" style="margin-bottom: 1.5rem;">
     <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 8px;">
         <input type="checkbox" id="shipping-checkbox" checked style="width: auto; margin: 0;">
@@ -135,7 +132,7 @@
                     <input type="email" id="cust-email" placeholder="البريد الإلكتروني" required>
                     <textarea id="cust-address" placeholder="عنوان التسليم بالتفصيل" required></textarea>
 
-                    <button type="submit" id="submit-order-btn" class="btn-primary" data-lang="btn_confirm_order">تأكيد وإرسال الطلب (واتساب وإيميل)</button>
+                    <button type="submit" id="submit-order-btn" class="btn-primary" data-lang="btn_confirm_order">تأكيد وإرسال الطلب</button>
                 </form>
             </div>
 
