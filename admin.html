@@ -3,99 +3,361 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم الإدارية | أورا للهدايا الفاخرة</title>
+    <title>لوحة التحكم الشاملة | أورا للهدايا الفاخرة</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .admin-container { max-width: 1200px; margin: 40px auto; padding: 20px; }
-        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid var(--gold-primary); padding-bottom: 15px; }
-        .admin-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; }
+        .admin-container { max-width: 1300px; margin: 30px auto; padding: 20px; display: none; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid var(--gold-primary); padding-bottom: 15px; flex-wrap: wrap; gap: 15px; }
+        .admin-nav-tabs { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; background: var(--card-bg); padding: 10px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .tab-btn { padding: 10px 18px; border: 1px solid var(--gold-primary); background: transparent; color: var(--text-dark); border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.3s; }
+        .tab-btn.active, .tab-btn:hover { background: var(--gold-primary); color: #fff; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .admin-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 25px; }
         @media(max-width: 900px) { .admin-grid { grid-template-columns: 1fr; } }
-        .admin-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; box-shadow: var(--shadow-soft); }
+        .admin-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; box-shadow: var(--shadow-soft); margin-bottom: 20px; }
         .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .admin-table th, .admin-table td { padding: 12px; text-align: right; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
-        .admin-table th { color: var(--gold-primary); background: rgba(197, 160, 89, 0.05); }
+        .admin-table th, .admin-table td { padding: 12px; text-align: right; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; }
+        .admin-table th { color: var(--gold-primary); background: rgba(197, 160, 89, 0.08); }
         .size-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 10px; margin-bottom: 10px; align-items: center; }
         .btn-action { padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; font-size: 0.85rem; font-weight: bold; margin-left: 5px; }
         .btn-edit { background: #3498db; color: #fff; }
         .btn-copy { background: #f39c12; color: #fff; }
         .btn-delete { background: #e74c3c; color: #fff; }
+        .preview-box { border: 2px dashed var(--gold-primary); padding: 20px; border-radius: 10px; margin-top: 15px; background: var(--bg-light); transition: all 0.3s; }
+        .color-picker-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        
+        /* نافذة تسجيل الدخول وحماية صفحة الإدارة */
+        #login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 17, 21, 0.92);
+            backdrop-filter: blur(8px);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 999999;
+        }
+        .login-card {
+            background: var(--card-bg); padding: 35px; border-radius: 16px;
+            border: 2px solid var(--gold-primary); width: 90%; max-width: 420px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5); text-align: center;
+        }
     </style>
 </head>
 <body>
 
-    <header class="header">
-        <div class="logo-container" style="display: flex; align-items: center; gap: 15px;">
-            <a href="index.html" style="text-decoration: none; color: var(--gold-primary); font-weight: bold;">← العودة للمتجر الرئيسي</a>
-        </div>
-        <h2 style="color: var(--gold-primary); font-size: 1.3rem;">لوحة إدارة منتجات أورا</h2>
-        <div></div>
-    </header>
-
-    <div class="admin-container">
-        <div class="admin-grid">
+    <!-- شاشة حماية وتسجيل الدخول -->
+    <div id="login-overlay">
+        <div class="login-card">
+            <h2 style="color: var(--gold-primary); margin-bottom: 10px;">🔒 تسجيل الدخول لصفحة الإدارة</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">أدخل اسم المستخدم وكلمة المرور للوصول إلى لوحة التحكم</p>
             
-            <!-- نموذج إضافة أو تعديل منتج -->
-            <div class="admin-card">
-                <h3 id="form-title" style="color: var(--gold-primary); margin-bottom: 20px;">➕ إضافة منتج جديد</h3>
-                <form id="product-form">
-                    <input type="hidden" id="prod-id">
-                    
-                    <label>عنوان المنتج:</label>
-                    <input type="text" id="prod-title" placeholder="مثال: صندوق الفخامة الملكي" required style="width:100%; padding:10px; margin:8px 0 15px; border-radius:6px; border:1px solid var(--border-color);">
+            <form id="login-form">
+                <input type="text" id="login-username" placeholder="اسم المستخدم (مثال: admin)" required style="width:100%; margin-bottom:15px;">
+                <input type="password" id="login-password" placeholder="كلمة المرور (مثال: admin123)" required style="width:100%; margin-bottom:20px;">
+                <button type="submit" class="btn-primary" style="width:100%;">دخول إلى لوحة التحكم</button>
+            </form>
+            <div id="login-error" style="color: #e74c3c; margin-top: 15px; display: none; font-size: 0.85rem; font-weight: bold;">❌ بيانات الدخول غير صحيحة!</div>
+        </div>
+    </div>
 
-                    <label>وصف المنتج:</label>
-                    <textarea id="prod-desc" placeholder="تفاصيل ومواصفات الصندوق..." style="width:100%; padding:10px; margin:8px 0 15px; border-radius:6px; border:1px solid var(--border-color); height:80px;"></textarea>
+    <!-- محتوى لوحة التحكم المخفي لحين تسجيل الدخول -->
+    <div id="admin-main-wrapper" style="display: none;">
+        <header class="header">
+            <div class="logo-container" style="display: flex; align-items: center; gap: 15px;">
+                <a href="index.html" class="btn-secondary" style="text-decoration: none; padding: 8px 16px;">👁️ المعاينة والانتقال للمتجر الرئيسي</a>
+            </div>
+            <h2 style="color: var(--gold-primary); font-size: 1.3rem;">🛡️ لوحة الإدارة والتحكم الشاملة - أورا</h2>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <small style="color: var(--text-muted);">OSAMA JO - 00962778060651</small>
+                <button id="logout-btn" style="background: #e74c3c; color: white; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: bold;">تسجيل الخروج 🚪</button>
+            </div>
+        </header>
 
-                    <label>رابط الصورة (مسار محلي أو URL):</label>
-                    <input type="text" id="prod-image" placeholder="assets/images/imajes (1).jpeg" required style="width:100%; padding:10px; margin:8px 0 15px; border-radius:6px; border:1px solid var(--border-color);">
-
-                    <label style="color: var(--gold-primary); font-weight: bold; display: block; margin-bottom: 10px;">إدارة الأحجام والأسعار (قبل / بعد الخصم):</label>
-                    
-                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px;">الحجم الصغير:</div>
-                    <div class="size-row">
-                        <input type="text" id="sz-0-name" value="صغير (20x20 سم)" readonly style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
-                        <input type="number" id="sz-0-before" placeholder="قبل الخصم" step="0.01" required style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
-                        <input type="number" id="sz-0-after" placeholder="بعد الخصم" step="0.01" required style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
-                    </div>
-
-                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; margin-top: 10px;">الحجم الوسط (+10 د.أ عن الصغير):</div>
-                    <div class="size-row">
-                        <input type="text" id="sz-1-name" value="وسط (25x25 سم)" readonly style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
-                        <input type="number" id="sz-1-before" placeholder="قبل الخصم" step="0.01" required style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
-                        <input type="number" id="sz-1-after" placeholder="بعد الخصم" step="0.01" required style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
-                    </div>
-
-                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; margin-top: 10px;">الحجم الكبير (+5 د.أ عن الوسط):</div>
-                    <div class="size-row">
-                        <input type="text" id="sz-2-name" value="كبير (30x30 سم)" readonly style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
-                        <input type="number" id="sz-2-before" placeholder="قبل الخصم" step="0.01" required style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
-                        <input type="number" id="sz-2-after" placeholder="بعد الخصم" step="0.01" required style="padding:8px; border:1px solid var(--border-color); border-radius:4px;">
-                    </div>
-
-                    <div style="display: flex; gap: 10px; margin-top: 20px;">
-                        <button type="submit" class="btn-primary" style="flex: 2; padding: 12px; font-weight: bold;">حفظ المنتج في القاعدة</button>
-                        <button type="button" id="reset-form-btn" style="flex: 1; background: #95a5a6; color: #fff; border: none; border-radius: 6px; cursor: pointer;">إلغاء</button>
-                    </div>
-                </form>
+        <div class="admin-container" style="display: block;">
+            
+            <!-- شريط علامات التبويب للانتقال السريع -->
+            <div class="admin-nav-tabs">
+                <button class="tab-btn active" onclick="window.switchTab('tab-products')">📦 إدارة المنتجات</button>
+                <button class="tab-btn" onclick="window.switchTab('tab-design')">🎨 تصميم وألوان الموقع والمعاينة</button>
+                <button class="tab-btn" onclick="window.switchTab('tab-customization')">⚙️ خيارات الجلود، الكفرات، الهدايا والعطور</button>
+                <button class="tab-btn" onclick="window.switchTab('tab-shipping')">🚚 أجور ومناطق التوصيل</button>
+                <button class="tab-btn" onclick="window.switchTab('tab-users')">👥 إدارة المستخدمين والصلاحيات</button>
             </div>
 
-            <!-- جدول عرض المنتجات وتعديلها -->
-            <div class="admin-card">
-                <h3 style="color: var(--gold-primary); margin-bottom: 15px;">📦 إدارة قائمة المنتجات المسجلة</h3>
-                <div style="max-height: 550px; overflow-y: auto;">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>الصورة</th>
-                                <th>اسم المنتج</th>
-                                <th>أسعار الحجوم (د.أ)</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-products-table-body">
-                            <!-- تعبئة ديناميكية -->
-                        </tbody>
-                    </table>
+            <!-- 1. تبويب إدارة المنتجات -->
+            <div id="tab-products" class="tab-content active">
+                <div class="admin-grid">
+                    <div class="admin-card">
+                        <h3 id="form-title" style="color: var(--gold-primary); margin-bottom: 20px;">➕ إضافة / تعديل منتج</h3>
+                        <form id="product-form">
+                            <input type="hidden" id="prod-id">
+                            
+                            <label>عنوان المنتج:</label>
+                            <input type="text" id="prod-title" placeholder="مثال: صندوق الفخامة الملكي" required>
+
+                            <label>وصف المنتج:</label>
+                            <textarea id="prod-desc" placeholder="تفاصيل ومواصفات الصندوق..." style="height:70px;"></textarea>
+
+                            <label>اختيار صورة المنتج من الجهاز (رفع تلقائي):</label>
+                            <input type="file" id="prod-img-file" accept="image/*" style="margin-bottom: 10px;">
+                            
+                            <label>أو رابط الصورة المباشر (URL / مسار محلي):</label>
+                            <input type="text" id="prod-image" placeholder="assets/images/imajes (1).jpeg" required>
+                            
+                            <div id="admin-upload-status" style="font-size: 0.85rem; color: var(--gold-primary); margin-bottom: 15px; display: none;"></div>
+
+                            <label style="color: var(--gold-primary); font-weight: bold; display: block; margin-bottom: 10px;">إدارة الأحجام والأسعار (قبل / بعد الخصم):</label>
+                            
+                            <div class="size-row">
+                                <input type="text" id="sz-0-name" value="صغير (20x20 سم)" readonly>
+                                <input type="number" id="sz-0-before" placeholder="قبل الخصم" step="0.01" required>
+                                <input type="number" id="sz-0-after" placeholder="بعد الخصم" step="0.01" required>
+                            </div>
+
+                            <div class="size-row">
+                                <input type="text" id="sz-1-name" value="وسط (25x25 سم)" readonly>
+                                <input type="number" id="sz-1-before" placeholder="قبل الخصم" step="0.01" required>
+                                <input type="number" id="sz-1-after" placeholder="بعد الخصم" step="0.01" required>
+                            </div>
+
+                            <div class="size-row">
+                                <input type="text" id="sz-2-name" value="كبير (30x30 سم)" readonly>
+                                <input type="number" id="sz-2-before" placeholder="قبل الخصم" step="0.01" required>
+                                <input type="number" id="sz-2-after" placeholder="بعد الخصم" step="0.01" required>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                                <button type="submit" class="btn-primary" style="flex: 2;">حفظ المنتج في القاعدة</button>
+                                <button type="button" id="reset-form-btn" style="flex: 1; background: #95a5a6; color: #fff; border: none; border-radius: 6px; cursor: pointer;">إلغاء</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="admin-card">
+                        <h3 style="color: var(--gold-primary); margin-bottom: 15px;">📦 قائمة المنتجات المسجلة في المتجر</h3>
+                        <div style="max-height: 550px; overflow-y: auto;">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>الصورة</th>
+                                        <th>اسم المنتج</th>
+                                        <th>أسعار الحجوم (د.أ)</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-products-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+  <!-- 2. تبويب تصميم وألوان الموقع ومعاينة المظهر -->
+<div id="tab-design" class="tab-content">
+    <div class="admin-grid">
+        <div class="admin-card">
+            <h3 style="color: var(--gold-primary); margin-bottom: 20px;">🎨 التحكم في تصميم وألوان وتنسيق الموقع</h3>
+            <form id="design-settings-form">
+                <div class="color-picker-group">
+                    <div>
+                        <label>لون الحدود والإطارات (Border Color):</label>
+                        <input type="color" id="theme-border-color" value="#C5A059" style="height:45px; padding:2px; cursor:pointer;">
+                    </div>
+                    <div>
+                        <label>لون الخلفية (Background Color):</label>
+                        <input type="color" id="theme-bg-color" value="#F4F5F7" style="height:45px; padding:2px; cursor:pointer;">
+                    </div>
+                    <div>
+                        <label>لون إطار عرض الصور (Image Frames):</label>
+                        <input type="color" id="theme-frame-color" value="#C5A059" style="height:45px; padding:2px; cursor:pointer;">
+                    </div>
+                    <div>
+                        <label>لون الخطوط الرئيسي (Text Color):</label>
+                        <input type="color" id="theme-text-color" value="#1A1A1A" style="height:45px; padding:2px; cursor:pointer;">
+                    </div>
+                </div>
+
+                <label>نوع الخط (Font Family):</label>
+                <select id="theme-font-family">
+                    <option value="'Segoe UI', Tahoma, Geneva, sans-serif">Segoe UI (افتراضي)</option>
+                    <option value="'Cairo', sans-serif">Cairo (عربي فاخر)</option>
+                    <option value="'Tajawal', sans-serif">Tajawal</option>
+                    <option value="Arial, sans-serif">Arial</option>
+                </select>
+
+                <label>حجم الخط الرئيسي (Font Size):</label>
+                <select id="theme-font-size">
+                    <option value="16px">عادي (16px)</option>
+                    <option value="18px">كبير (18px)</option>
+                    <option value="14px">صغير (14px)</option>
+                </select>
+
+                <!-- رفع صورة خلفية الموقع من الجهاز -->
+                <label>اختيار صورة خلفية الموقع من الجهاز (اختياري):</label>
+                <input type="file" id="theme-bg-file" accept="image/*">
+                <label>أو رابط صورة الخلفية المباشر (URL):</label>
+                <input type="text" id="theme-bg-image" placeholder="أدخل رابط الصورة أو اتركه فارغاً">
+
+                <label>اسم الموقع العام:</label>
+                <input type="text" id="site-name-input" value="أورا للهدايا الفاخرة | AURA">
+
+                <!-- رفع الشعار النهاري والليلي من الجهاز -->
+                <label style="color: var(--gold-primary); font-weight: bold; margin-top: 10px; display: block;">إدارة شعارات الموقع (النهاري والليلي):</label>
+                <div style="display:flex; gap:15px; flex-direction:column; margin-bottom:15px; background: rgba(197, 160, 89, 0.05); padding: 12px; border-radius: 8px;">
+                    <div>
+                        <small style="color:var(--text-muted); font-weight:bold; display:block; margin-bottom:4px;">الشعار النهاري:</small>
+                        <input type="file" id="logo-day-file" accept="image/*" style="margin-bottom:6px;">
+                        <input type="text" id="logo-day-input" placeholder="assets/aura.png">
+                    </div>
+                    <div>
+                        <small style="color:var(--text-muted); font-weight:bold; display:block; margin-bottom:4px;">الشعار الليلي:</small>
+                        <input type="file" id="logo-night-file" accept="image/*" style="margin-bottom:6px;">
+                        <input type="text" id="logo-night-input" placeholder="assets/baura.png">
+                    </div>
+                </div>
+
+                <!-- رفع الصورة الرئيسية من الجهاز -->
+                <label>اختيار الصورة الرئيسية بالصفحة (Hero Image) من الجهاز:</label>
+                <input type="file" id="hero-img-file" accept="image/*">
+                <label>أو رابط الصورة الرئيسية (URL):</label>
+                <input type="text" id="hero-img-input" placeholder="assets/images/imajes (1).jpeg">
+
+                <div id="design-upload-status" style="font-size: 0.85rem; color: var(--gold-primary); margin: 10px 0; display: none;"></div>
+
+                <label>النص الرئيسي بجانب الصورة الرئيسية:</label>
+                <textarea id="hero-text-input" style="height:70px;">فن العطاء بلمسة من الفخامة والذوق الرفيع</textarea>
+
+                <label>ترتيب وعدد صناديق الهدايا بالصفحة الرئيسية:</label>
+                <input type="number" id="products-count-limit" value="8" min="1" max="50">
+
+                <button type="submit" class="btn-primary" style="margin-top: 15px;">حفظ وتطبيق تصميم الموقع</button>
+            </form>
+        </div>
+
+        <div class="admin-card">
+            <h3 style="color: var(--gold-primary); margin-bottom: 15px;">👁️ صندوق المعاينة الحية المباشرة</h3>
+            <p style="font-size:0.85rem; color:var(--text-muted);">هذا الصندوق يعكس التغييرات التي تجريها في الألوان والصورة لحظياً قبل الحفظ:</p>
+            
+            <div id="live-preview-box" class="preview-box">
+                <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
+                    <img id="prev-logo-img" src="assets/aura.png" alt="الشعار" style="height:50px; object-fit:contain;">
+                    <h4 id="prev-site-title" style="margin:0;">أورا للهدايا الفاخرة</h4>
+                </div>
+                
+                <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
+                    <img id="prev-hero-img" src="assets/images/imajes (1).jpeg" alt="الصورة الرئيسية" style="width:120px; height:90px; object-fit:cover; border-radius:8px; border:2px solid var(--gold-primary);">
+                    <div style="flex:1;">
+                        <h5 id="prev-hero-heading" style="margin:0 0 5px 0;">فن العطاء بلمسة من الفخامة</h5>
+                        <p style="font-size:0.8rem; margin:0; color:var(--text-muted);">صندوق المعاينة للتأكد من تنسيق وتناسق الألوان والخلفية والخطوط.</p>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-primary" style="margin-top:15px; width:auto; padding:8px 15px; font-size:0.85rem;">زر تجريبي لمطابقة الألوان</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- 3. تبويب خيارات الجلود، الكفرات، الهدايا والعطور -->
+            <div id="tab-customization" class="tab-content">
+                <div class="admin-grid">
+                    <div class="admin-card">
+                        <h3 style="color: var(--gold-primary); margin-bottom: 20px;">⚙️ التحكم بخيارات التخصيص والخصومات</h3>
+                        <form id="customization-options-form">
+                            <label>خيارات ألوان الجلد المغلف (مفصولة بفاصلة):</label>
+                            <input type="text" id="opt-leather-colors" value="أسود, بيج, أبيض, مخصص">
+
+                            <label>أنواع الكفر النهائي وقيمة الخصم:</label>
+                            <small style="color:var(--text-muted); display:block; margin-bottom:5px;">افتراضي: زجاج (0)، أكريليك (خصم 3)، بلا (خصم 5)</small>
+                            <input type="text" id="opt-cover-types" value="زجاج:0, اكريليك:-3, بلا:-5">
+
+                            <label>الهدايا الداخلية الإضافية وسعرها (د.أ لكل قطعة):</label>
+                            <input type="text" id="opt-extra-gifts" value="محفظة جلد + مسبحه:5, ساعة رجالي:5, ساعة ستاتي:5">
+
+                            <label>أنواع العطور السويسرية المتاحة:</label>
+                            <input type="text" id="opt-perfumes" value="هوجو, عنبر, عود">
+
+                            <button type="submit" class="btn-primary" style="margin-top:15px;">حفظ وتحديث الخيارات</button>
+                        </form>
+                    </div>
+
+                    <div class="admin-card">
+                        <h3 style="color: var(--gold-primary); margin-bottom: 15px;">ℹ️ ملاحظات الجودة والضمان</h3>
+                        <div style="background: rgba(197, 160, 89, 0.08); padding: 15px; border-radius: 8px; font-size: 0.9rem; line-height: 1.6;">
+                            <p>✔️ نستخدم أفخم وأرقى أنواع العطور السويسرية الفاخرة الأصلية بالإضافة إلى المسك الأصلي والعطر مكفول الثبات والفوحان.</p>
+                            <p>✔️ الساعات الرجالية والنسائية المستخدمة في البكجات ضد الماء تماماً.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. تبويب أجور ومناطق التوصيل -->
+            <div id="tab-shipping" class="tab-content">
+                <div class="admin-grid">
+                    <div class="admin-card">
+                        <h3 style="color: var(--gold-primary); margin-bottom: 20px;">🚚 إضافة منطقة توصيل جديدة</h3>
+                        <form id="shipping-zone-form">
+                            <label>اسم المنطقة / المحافظات:</label>
+                            <input type="text" id="zone-name" placeholder="مثال: العقبة والجنوب" required>
+
+                            <label>سعر التوصيل (د.أ):</label>
+                            <input type="number" id="zone-price" step="0.5" placeholder="5.00" required>
+
+                            <button type="submit" class="btn-primary" style="margin-top:10px;">إضافة المنطقة</button>
+                        </form>
+                    </div>
+
+                    <div class="admin-card">
+                        <h3 style="color: var(--gold-primary); margin-bottom: 15px;">📍 المناطق المسجلة وأسعار التوصيل</h3>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>اسم المنطقة</th>
+                                    <th>أجور التوصيل</th>
+                                    <th>الإجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="shipping-zones-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. تبويب إدارة المستخدمين والصلاحيات -->
+            <div id="tab-users" class="tab-content">
+                <div class="admin-grid">
+                    <div class="admin-card">
+                        <h3 style="color: var(--gold-primary); margin-bottom: 20px;">👤 إضافة / تغيير كلمة مرور مستخدم</h3>
+                        <form id="user-management-form">
+                            <label>اسم المستخدم:</label>
+                            <input type="text" id="user-username" placeholder="admin" required>
+
+                            <label>كلمة المرور الجديدة:</label>
+                            <input type="password" id="user-password" placeholder="******" required>
+
+                            <label>الصلاحية:</label>
+                            <select id="user-role">
+                                <option value="admin">مدير كامل الصلاحيات (Admin)</option>
+                                <option value="manager">مشرف مبيعات (Manager)</option>
+                            </select>
+
+                            <button type="submit" class="btn-primary" style="margin-top:15px;">حفظ المستخدم / كلمة المرور</button>
+                        </form>
+                    </div>
+
+                    <div class="admin-card">
+                        <h3 style="color: var(--gold-primary); margin-bottom: 15px;">👥 قائمة مستخدمي لوحة التحكم</h3>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>اسم المستخدم</th>
+                                    <th>الصلاحية</th>
+                                    <th>تاريخ الإنشاء</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-users-table-body"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 

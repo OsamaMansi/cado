@@ -19,6 +19,8 @@
         <a href="#hero" data-lang="nav_home">الرئيسية</a>
         <a href="#products" data-lang="nav_products">البكجات الفاخرة</a>
         <a href="#checkout" data-lang="nav_checkout">صمّم صندوقك</a>
+        <a href="#contact" data-lang="nav_contact">اتصل بنا</a>
+        <a href="admin.html" style="color: var(--gold-primary); font-weight: bold;">⚙️ لوحة الإدارة</a>
     </div>
 
     <div class="header-actions">
@@ -37,6 +39,11 @@
     <div class="hero-section">
         <img id="bg-logo-img" src="assets/aura.png" alt="خلفية الشعار" class="hero-bg-logo">
         <div class="hero-content">
+            <!-- عداد الزيارات الفعلي المربوط بقاعدة البيانات (يبدأ من 51433) -->
+            <div id="visitor-counter-display" style="display: inline-block; background: rgba(197, 160, 89, 0.12); padding: 6px 14px; border-radius: 20px; font-size: 0.9rem; color: var(--gold-primary); font-weight: bold; margin-bottom: 15px; border: 1px solid var(--gold-primary);">
+                👁️ عدد الزيارات الفعلية: <span id="counter-num">51433</span>
+            </div>
+
             <h1 data-lang="hero_heading">فن العطاء بلمسة من <span>الفخامة والذوق الرفيع</span></h1>
             <p data-lang="hero_desc">نصنع لك بكجات وصناديق هدايا فائقة الرقي، مع حفر ورسم مخصص على الزجاج، الأكريليك والرخام لتبقى ذكرياتكم خالدة.</p>
             <div class="hero-buttons">
@@ -66,7 +73,43 @@
                     <select id="custom-product-select" required></select>
 
                     <label data-lang="label_select_size">تأكيد الحجم المطلوب:</label>
-                    <div id="size-options" class="radio-group" style="margin: 10px 0 20px; display: flex; gap: 15px;"></div>
+                    <div id="size-options" class="radio-group" style="margin: 10px 0 20px; display: flex; gap: 15px; flex-wrap: wrap;"></div>
+
+                    <!-- خيارات الجلد المغلف، الكفر، الهدايا والعطور السويسرية المضافة -->
+                    <label>لون الجلد المغلف لصندوق الهدية:</label>
+                    <select id="leather-color-select">
+                        <option value="أسود" selected>أسود (افتراضي)</option>
+                        <option value="بيج">بيج</option>
+                        <option value="أبيض">أبيض</option>
+                        <option value="مخصص">لون مخصص</option>
+                    </select>
+
+                    <label>نوع الكفر النهائي للحفر:</label>
+                    <select id="cover-type-select">
+                        <option value="زجاج" selected>زجاج (افتراضي)</option>
+                        <option value="أكريليك">أكريليك (خصم 3 دنانير)</option>
+                        <option value="بلا">بلا (خصم 5 دنانير)</option>
+                    </select>
+
+                    <label>نوع الهدية الداخلية الإضافية (+5 دنانير عن كل هدية):</label>
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin: 8px 0 15px;">
+                        <label style="display:flex; align-items:center; gap:8px; font-weight:normal; cursor:pointer;">
+                            <input type="checkbox" class="extra-gift-chk" value="محفظة جلد + مسبحة" style="width:auto; margin:0;"> محفظة جلد + مسبحة
+                        </label>
+                        <label style="display:flex; align-items:center; gap:8px; font-weight:normal; cursor:pointer;">
+                            <input type="checkbox" class="extra-gift-chk" value="ساعة رجالي" style="width:auto; margin:0;"> ساعة رجالي (ضد الماء)
+                        </label>
+                        <label style="display:flex; align-items:center; gap:8px; font-weight:normal; cursor:pointer;">
+                            <input type="checkbox" class="extra-gift-chk" value="ساعة ستاتي" style="width:auto; margin:0;"> ساعة ستاتي (ضد الماء)
+                        </label>
+                    </div>
+
+                    <label>نوع العطر المرفق (عطور سويسرية فاخرة مكفولة):</label>
+                    <select id="perfume-type-select">
+                        <option value="هوجو" selected>هوجو</option>
+                        <option value="عنبر">عنبر</option>
+                        <option value="عود">عود</option>
+                    </select>
 
                     <label data-lang="label_engraving">العبارة أو الاسم المطلوب طباعته على الصندوق:</label>
                     <input type="text" id="engraving-text" placeholder="مثال: لملكة قلبي - ياسمين">
@@ -77,37 +120,36 @@
                     <label data-lang="label_upload_image">إضافة صورة للرسم على الزجاج/الأكريليك:</label>
                     <input type="file" id="custom-image-file" accept="image/*">
                     
-                    <!-- معاينة الصورة المرفقة قبل إضافتها للسلة -->
                     <div id="image-preview-container" style="margin: 10px 0; display: none;">
                         <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 5px;">معاينة الصورة المرفقة:</span>
                         <img id="upload-preview-img" src="" alt="معاينة الصورة" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--gold-primary);">
                     </div>
 
-                    <button type="button" id="add-to-cart-btn" class="btn-primary" style="margin-top: 10px;" data-lang="btn_add_to_cart">+ إضافة هذا الطلب إلى السلة</button>
+                    <button type="button" id="add-to-cart-btn" class="btn-primary" style="margin-top: 15px;" data-lang="btn_add_to_cart">+ إضافة هذا الطلب إلى السلة</button>
                 </form>
             </div>
 
             <div class="card summary-card">
                 <h3 data-lang="summary_title" style="color: var(--gold-primary); margin-bottom: 1.5rem;">2. ملخص الطلبيات النشطة</h3>
-                <div id="cart-items" class="cart-items-list" style="margin-bottom: 1.5rem; max-height: 250px; overflow-y: auto;">
+                <div id="cart-items" class="cart-items-list" style="margin-bottom: 1.5rem; max-height: 280px; overflow-y: auto;">
                     <p class="empty-msg" data-lang="empty_cart_msg" style="color: var(--text-muted);">لم يتم إضافة أية طلبات بعد.</p>
                 </div>
 
-<div class="shipping-toggle" style="margin-bottom: 1.5rem;">
-    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 8px;">
-        <input type="checkbox" id="shipping-checkbox" checked style="width: auto; margin: 0;">
-        <span data-lang="shipping_label">إضافة أجور التوصيل لكامل البكج (واصل للعميل)</span>
-    </label>
-    
-    <div id="city-select-wrapper" style="margin-top: 10px;">
-        <label style="font-size: 0.9rem; color: var(--text-muted);">اختر المحافظة/المنطقة للتوصيل:</label>
-        <select id="shipping-city-select" style="margin-top: 5px; margin-bottom: 5px;">
-            <option value="3.00">عمان / الزرقاء / السلط (3.00 د.أ)</option>
-            <option value="4.00">إربد / المفرق / جرش / عجلون (4.00 د.أ)</option>
-            <option value="5.00">المحافظات الجنوبية (الكرك / الطفيلة / معان / العقبة) (5.00 د.أ)</option>
-        </select>
-    </div>
-</div>
+                <div class="shipping-toggle" style="margin-bottom: 1.5rem;">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 8px;">
+                        <input type="checkbox" id="shipping-checkbox" checked style="width: auto; margin: 0;">
+                        <span data-lang="shipping_label">إضافة أجور التوصيل لكامل البكج (واصل للعميل)</span>
+                    </label>
+                    
+                    <div id="city-select-wrapper" style="margin-top: 10px;">
+                        <label style="font-size: 0.9rem; color: var(--text-muted);">اختر المحافظة/المنطقة للتوصيل:</label>
+                        <select id="shipping-city-select" style="margin-top: 5px; margin-bottom: 5px;">
+                            <option value="3.00">عمان / الزرقاء / السلط (3.00 د.أ)</option>
+                            <option value="4.00">إربد / المفرق / جرش / عجلون (4.00 د.أ)</option>
+                            <option value="5.00">المحافظات الجنوبية (الكرك / الطفيلة / معان / العقبة) (5.00 د.أ)</option>
+                        </select>
+                    </div>
+                </div>
 
                 <div class="price-breakdown" style="border-top: 1px solid var(--border-color); padding-top: 1rem; margin-bottom: 1.5rem;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
@@ -128,7 +170,7 @@
                 <form id="order-submit-form" class="order-form">
                     <h4 data-lang="customer_info_title" style="margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 5px;">بيانات الاستلام والتحقق</h4>
                     <input type="text" id="cust-name" placeholder="الاسم الكامل" required>
-                    <input type="tel" id="cust-phone" placeholder="رقم الواتساب (مثال: 9665xxxxxxxx)" required>
+                    <input type="tel" id="cust-phone" placeholder="رقم الواتساب والهاتف (مثال: 00962778060651)" required>
                     <input type="email" id="cust-email" placeholder="البريد الإلكتروني" required>
                     <textarea id="cust-address" placeholder="عنوان التسليم بالتفصيل" required></textarea>
 
@@ -138,6 +180,28 @@
 
         </div>
     </section>
+
+    <!-- قسم اتصل بنا المضاف المعتمد على رقم الهاتف والواتساب 00962778060651 حصراً -->
+    <section id="contact" class="container" style="margin-top: 3rem;">
+        <div class="card" style="text-align: center; background: var(--card-bg); border: 2px solid var(--gold-primary); border-radius: 16px; padding: 2.5rem;">
+            <h2 style="color: var(--gold-primary); margin-bottom: 1rem;">📞 اتصل بنا واستفسر عن طلبيتك</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">نحن في خدمتك دائماً لتلبية كافة طلبات الهدايا والبكجات الفاخرة وتخصيص الحفر.</p>
+            
+            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <a href="tel:00962778060651" class="btn-secondary" style="display: flex; align-items: center; gap: 10px; text-decoration: none; padding: 12px 25px; font-weight: bold;">
+                    📱 رقم الهاتف: 00962778060651
+                </a>
+                <a href="https://wa.me/962778060651" target="_blank" class="btn-primary" style="display: flex; align-items: center; gap: 10px; text-decoration: none; width: auto; padding: 12px 25px; font-weight: bold; background: #25D366;">
+                    💬 المراسلة عبر الواتساب: 00962778060651
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ذيل الصفحة والحقوق محفوظة -->
+    <footer style="text-align: center; padding: 25px; background: var(--card-bg); border-top: 2px solid var(--gold-primary); margin-top: 40px; font-size: 0.95rem; color: var(--text-muted);">
+        جميع الحقوق محفوظة © OSAMA JO - 00962778060651 للطلب والاستفسار
+    </footer>
 
     <script type="module" src="js/app.js"></script>
 </body>
